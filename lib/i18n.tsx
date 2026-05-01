@@ -21,6 +21,7 @@ interface Translations {
     title: string
     subtitle: string
     cta: string
+    secondary: string
     ctaSecondary: string
   }
   // Process
@@ -89,6 +90,7 @@ const translations: Record<Language, Translations> = {
       title: 'Tu app. Tu negocio. Sin tensiones.',
       subtitle: 'Diseñamos y desarrollamos apps listas para operar en días. Con integraciones reales para vender, operar y escalar.',
       cta: 'Quiero mi app',
+      secondary: 'Ver proceso',
       ctaSecondary: 'Ver demos',
     },
     process: {
@@ -149,6 +151,7 @@ const translations: Record<Language, Translations> = {
       title: 'Your app. Your business. No stress.',
       subtitle: 'We design and develop apps ready to operate in days. With real integrations to sell, operate and scale.',
       cta: 'I want my app',
+      secondary: 'See process',
       ctaSecondary: 'View demos',
     },
     process: {

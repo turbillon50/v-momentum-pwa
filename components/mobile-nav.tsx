@@ -3,6 +3,7 @@
 import { Home, Workflow, Puzzle, CreditCard } from 'lucide-react'
 import { VAIButton } from './v-ai-button'
 import { motion } from 'framer-motion'
+import { useLanguage } from '@/lib/i18n'
 
 interface MobileNavProps {
   activeSection: string
@@ -11,15 +12,16 @@ interface MobileNavProps {
   aiState?: 'idle' | 'thinking' | 'executing' | 'success'
 }
 
-const navItems = [
-  { id: 'inicio', label: 'Inicio', icon: Home },
-  { id: 'proceso', label: 'Proceso', icon: Workflow },
-  { id: 'v-ai', label: 'V', isCenter: true },
-  { id: 'integraciones', label: 'Integraciones', icon: Puzzle },
-  { id: 'precios', label: 'Precios', icon: CreditCard },
-]
-
 export function MobileNav({ activeSection, onNavigate, onVClick, aiState = 'idle' }: MobileNavProps) {
+  const { t } = useLanguage()
+  
+  const navItems = [
+    { id: 'inicio', label: t.nav.home, icon: Home },
+    { id: 'proceso', label: t.nav.process, icon: Workflow },
+    { id: 'v-ai', label: 'V', isCenter: true },
+    { id: 'integraciones', label: t.nav.integrations, icon: Puzzle },
+    { id: 'precios', label: t.nav.pricing, icon: CreditCard },
+  ]
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 md:hidden">
       {/* Blur background */}
