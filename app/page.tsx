@@ -13,6 +13,7 @@ import { VAssistantPanel } from '@/components/v-assistant-panel'
 import { HeroSection } from '@/components/sections/hero-section'
 import { ProcesoSection } from '@/components/sections/proceso-section'
 import { IntegrationsSection } from '@/components/sections/integrations-section'
+import { GallerySection } from '@/components/sections/gallery-section'
 import { PricingSection } from '@/components/sections/pricing-section'
 import { DemosSection } from '@/components/sections/demos-section'
 import { FuenteVerdadSection } from '@/components/sections/fuente-verdad-section'
@@ -20,12 +21,21 @@ import { DashboardClientSection } from '@/components/sections/dashboard-client-s
 import { DashboardAdminSection } from '@/components/sections/dashboard-admin-section'
 import { ContactSection } from '@/components/sections/contact-section'
 
+// Hooks
+import { useTheme } from 'next-themes'
+
 export default function Home() {
   const [showSplash, setShowSplash] = useState(true)
   const [activeSection, setActiveSection] = useState('inicio')
   const [isAssistantOpen, setIsAssistantOpen] = useState(false)
   const [aiState, setAiState] = useState<'idle' | 'thinking' | 'executing' | 'success'>('idle')
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true)
+  }, [])
   
   // Section refs for scroll detection
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({})
@@ -57,10 +67,11 @@ export default function Home() {
 
   // Toggle theme
   const handleThemeToggle = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark'
-    setTheme(newTheme)
-    document.documentElement.classList.toggle('light', newTheme === 'light')
+    setTheme(theme === 'dark' ? 'light' : 'dark')
   }
+  
+  // Get current theme (handle SSR)
+  const currentTheme = mounted ? theme : 'dark'
 
   // Scroll detection for active section
   useEffect(() => {
@@ -99,7 +110,7 @@ export default function Home() {
             onNavigate={handleNavigate}
             onVClick={handleVClick}
             aiState={aiState}
-            theme={theme}
+            theme={currentTheme as 'dark' | 'light'}
             onThemeToggle={handleThemeToggle}
           />
 
@@ -125,6 +136,13 @@ export default function Home() {
               ref={(el) => { sectionRefs.current['integraciones'] = el }}
             >
               <IntegrationsSection />
+            </section>
+
+            {/* Galeria Cinematografica */}
+            <section 
+              ref={(el) => { sectionRefs.current['galeria'] = el }}
+            >
+              <GallerySection />
             </section>
 
             {/* Demos / Casos de Uso */}
@@ -174,12 +192,12 @@ export default function Home() {
               <div className="max-w-6xl mx-auto">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                   {/* Logo */}
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl font-bold chrome-text">V</span>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-light text-foreground/90">Momentum</span>
-                      <span className="text-[8px] text-primary tracking-[0.2em] uppercase">SaaS Technology Apps Design</span>
-                    </div>
+                  <div className="flex items-center">
+                    <img 
+                      src="/images/v-momentum-logo.jpeg" 
+                      alt="V Momentum" 
+                      className="h-10 w-auto object-contain"
+                    />
                   </div>
 
                   {/* Links */}

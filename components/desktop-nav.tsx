@@ -20,7 +20,8 @@ import {
 } from 'lucide-react'
 import { VAIButton } from './v-ai-button'
 import { Button } from '@/components/ui/button'
-import { User } from 'lucide-react'
+import { User, Globe } from 'lucide-react'
+import { useLanguage } from '@/lib/i18n'
 
 interface DesktopNavProps {
   activeSection: string
@@ -56,6 +57,7 @@ export function DesktopNav({
   onThemeToggle
 }: DesktopNavProps) {
   const [isExpanded, setIsExpanded] = useState(false)
+  const { language, setLanguage, t } = useLanguage()
 
   return (
     <>
@@ -104,6 +106,16 @@ export function DesktopNav({
 
           {/* Right side actions */}
           <div className="flex items-center gap-3">
+            {/* Language toggle */}
+            <button
+              onClick={() => setLanguage(language === 'es' ? 'en' : 'es')}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-muted-foreground hover:text-foreground transition-colors text-xs font-medium"
+              aria-label={language === 'es' ? 'Switch to English' : 'Cambiar a Español'}
+            >
+              <Globe className="w-3.5 h-3.5" />
+              {language.toUpperCase()}
+            </button>
+
             {/* Theme toggle */}
             <button
               onClick={onThemeToggle}
@@ -134,7 +146,7 @@ export function DesktopNav({
               className="text-muted-foreground hover:text-foreground"
             >
               <User className="w-4 h-4 mr-2" />
-              Sign In
+              {t.nav.signIn}
             </Button>
 
             {/* CTA */}
@@ -142,7 +154,7 @@ export function DesktopNav({
               onClick={() => onNavigate('contacto')}
               className="bg-primary hover:bg-primary/90 text-primary-foreground"
             >
-              Quiero mi app
+              {t.hero.cta}
             </Button>
           </div>
         </div>
