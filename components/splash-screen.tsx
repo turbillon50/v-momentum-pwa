@@ -73,17 +73,14 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="flex flex-col items-center gap-6"
+          className="flex flex-col items-center gap-8"
         >
-          {/* Brand Logo - Chrome V */}
-          <div className="flex items-center gap-3">
-            <span className="text-5xl md:text-6xl font-bold chrome-text tracking-tight">V</span>
-            <div className="w-px h-10 bg-gradient-to-b from-transparent via-border to-transparent" />
-            <div className="flex flex-col">
-              <span className="text-2xl md:text-3xl font-light text-foreground/90 tracking-wide">Momentum</span>
-              <span className="text-[10px] md:text-xs text-primary tracking-[0.3em] uppercase">SaaS Technology Apps Design</span>
-            </div>
-          </div>
+          {/* Brand Logo - Real Image */}
+          <img 
+            src="/images/v-momentum-logo.jpeg" 
+            alt="V Momentum - SaaS Technology Apps Design" 
+            className="h-20 md:h-28 w-auto object-contain"
+          />
 
           {/* V AI Logo */}
           <VAILogo size={100} />

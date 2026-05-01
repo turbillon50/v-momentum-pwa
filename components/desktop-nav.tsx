@@ -66,13 +66,13 @@ export function DesktopNav({
           {/* Logo */}
           <button 
             onClick={() => onNavigate('inicio')}
-            className="flex items-center gap-2 group"
+            className="flex items-center gap-3 group"
           >
-            <span className="text-2xl font-bold chrome-text">V</span>
-            <div className="flex flex-col">
-              <span className="text-sm font-light text-foreground/90 tracking-wide">Momentum</span>
-              <span className="text-[8px] text-primary tracking-[0.2em] uppercase opacity-80">SaaS Technology</span>
-            </div>
+            <img 
+              src="/images/v-momentum-logo.jpeg" 
+              alt="V Momentum" 
+              className="h-10 w-auto object-contain"
+            />
           </button>
 
           {/* Main navigation */}
@@ -108,6 +108,7 @@ export function DesktopNav({
             <button
               onClick={onThemeToggle}
               className="p-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors"
+              aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
             >
               {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
@@ -122,6 +123,19 @@ export function DesktopNav({
             >
               {isExpanded ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
+
+            {/* Sign In Button - Ready for Clerk integration */}
+            <Button 
+              variant="ghost"
+              onClick={() => {
+                // Future Clerk integration
+                console.log('[V Momentum] Sign In clicked - Clerk integration pending')
+              }}
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <User className="w-4 h-4 mr-2" />
+              Sign In
+            </Button>
 
             {/* CTA */}
             <Button 
