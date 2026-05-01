@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { VAILogo } from './v-ai-button'
 
 interface SplashScreenProps {
   onComplete: () => void
@@ -68,22 +67,22 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
 
       {/* Main content */}
       <div className="relative z-10 flex flex-col items-center gap-8">
-        {/* V Momentum Logo */}
+        {/* V Momentum Brand Logo - HERO PROMINENCE */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="flex flex-col items-center gap-8"
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 1, ease: 'easeOut' }}
+          className="flex flex-col items-center"
         >
-          {/* Brand Logo - Real Image */}
+          {/* Brand Logo - Main Hero */}
           <img 
             src="/images/v-momentum-logo.jpeg" 
             alt="V Momentum - SaaS Technology Apps Design" 
-            className="h-20 md:h-28 w-auto object-contain"
+            className="h-32 sm:h-40 md:h-52 lg:h-64 w-auto object-contain drop-shadow-2xl"
+            style={{
+              filter: 'drop-shadow(0 0 30px rgba(59,130,246,0.3))'
+            }}
           />
-
-          {/* V AI Logo */}
-          <VAILogo size={100} />
         </motion.div>
 
         {/* Loading message */}

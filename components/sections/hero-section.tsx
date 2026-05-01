@@ -3,7 +3,6 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, Zap, Cloud, Bot, Gauge, MessageCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { VAILogo } from '@/components/v-ai-button'
 
 interface HeroSectionProps {
   onNavigate: (section: string) => void
@@ -58,14 +57,21 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
           </div>
         </motion.div>
 
-        {/* V AI Logo */}
+        {/* V Momentum Brand Logo - Hero Prominence */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex justify-center mb-8"
+          className="flex justify-center mb-10"
         >
-          <VAILogo size={80} />
+          <img 
+            src="/images/v-momentum-logo.jpeg" 
+            alt="V Momentum - SaaS Technology Apps Design" 
+            className="h-20 sm:h-24 md:h-32 lg:h-40 w-auto object-contain"
+            style={{
+              filter: 'drop-shadow(0 0 40px rgba(59,130,246,0.25))'
+            }}
+          />
         </motion.div>
 
         {/* Main headline */}
