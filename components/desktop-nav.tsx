@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import { VAIButton } from './v-ai-button'
 import { Button } from '@/components/ui/button'
+import { User } from 'lucide-react'
 
 interface DesktopNavProps {
   activeSection: string
