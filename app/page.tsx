@@ -1,86 +1,209 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useTheme } from 'next-themes'
 
-// Components
-import { SplashScreen } from '@/components/splash-screen'
-import { MobileNav } from '@/components/mobile-nav'
-import { DesktopNav } from '@/components/desktop-nav'
-import { VAssistantPanel } from '@/components/v-assistant-panel'
+// Premium UI Components
+import { AnimatedBackground } from '@/components/ui/animated-background'
 
-// Sections - Cinematic & Premium
-import { HeroCinematic } from '@/components/sections/hero-cinematic'
+// Navigation
+import { TopNav } from '@/components/navigation/top-nav'
+import { BottomNav } from '@/components/navigation/bottom-nav'
+
+// Premium Sections
+import { HeroPremium } from '@/components/sections/hero-premium'
 import { ProcesoSection } from '@/components/sections/proceso-section'
-import { IntegrationsGallery } from '@/components/sections/integrations-gallery'
-import { MarketingShowcase } from '@/components/sections/marketing-showcase'
+import { IntegrationsEcosystem } from '@/components/sections/integrations-ecosystem'
+import { MarketingGallery } from '@/components/sections/marketing-gallery'
 import { PricingSection } from '@/components/sections/pricing-section'
 import { DemosSection } from '@/components/sections/demos-section'
+import { FuenteVerdadSection } from '@/components/sections/fuente-verdad-section'
 import { ContactSection } from '@/components/sections/contact-section'
+
+// V Assistant
+import { VAssistantModal } from '@/components/v-assistant-modal'
 
 // Language
 import { useLanguage } from '@/lib/i18n'
+
+// Premium Splash Screen
+function PremiumSplash({ onComplete }: { onComplete: () => void }) {
+  useEffect(() => {
+    const timer = setTimeout(onComplete, 2800)
+    return () => clearTimeout(timer)
+  }, [onComplete])
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-[200] bg-black flex items-center justify-center overflow-hidden"
+      exit={{ opacity: 0 }}
+      transition={{ duration: 1 }}
+    >
+      {/* Animated particles background */}
+      <div className="absolute inset-0">
+        {[...Array(50)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-blue-500/50 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -100, 0],
+              opacity: [0, 1, 0],
+              scale: [0, 1.5, 0],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Energy waves */}
+      {[...Array(3)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full border border-blue-500/20"
+          style={{
+            width: 200 + i * 150,
+            height: 200 + i * 150,
+          }}
+          animate={{
+            scale: [1, 2, 1],
+            opacity: [0.3, 0, 0.3],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            delay: i * 0.5,
+          }}
+        />
+      ))}
+
+      {/* Logo container */}
+      <motion.div
+        initial={{ scale: 0.5, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 1, type: 'spring' }}
+        className="relative z-10 flex flex-col items-center"
+      >
+        {/* Glow effect */}
+        <motion.div
+          className="absolute inset-0 blur-[100px] -z-10"
+          animate={{
+            background: [
+              'radial-gradient(circle, rgba(59,130,246,0.4) 0%, transparent 70%)',
+              'radial-gradient(circle, rgba(139,92,246,0.4) 0%, transparent 70%)',
+              'radial-gradient(circle, rgba(6,182,212,0.4) 0%, transparent 70%)',
+              'radial-gradient(circle, rgba(59,130,246,0.4) 0%, transparent 70%)',
+            ],
+          }}
+          transition={{ duration: 3, repeat: Infinity }}
+        />
+        
+        {/* Logo */}
+        <motion.img
+          src="/images/v-momentum-logo.jpeg"
+          alt="V Momentum"
+          className="h-40 md:h-56 w-auto"
+          animate={{
+            filter: [
+              'drop-shadow(0 0 60px rgba(59,130,246,0.6))',
+              'drop-shadow(0 0 80px rgba(139,92,246,0.6))',
+              'drop-shadow(0 0 60px rgba(6,182,212,0.6))',
+              'drop-shadow(0 0 60px rgba(59,130,246,0.6))',
+            ],
+          }}
+          transition={{ duration: 3, repeat: Infinity }}
+        />
+        
+        {/* Loading bar */}
+        <motion.div
+          className="mt-10 w-48 h-1 bg-white/10 rounded-full overflow-hidden"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
+          <motion.div
+            className="h-full rounded-full"
+            style={{
+              background: 'linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4)',
+            }}
+            initial={{ width: '0%' }}
+            animate={{ width: '100%' }}
+            transition={{ duration: 2.3, ease: 'easeInOut' }}
+          />
+        </motion.div>
+
+        {/* Tagline */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+          className="mt-6 text-white/40 text-sm tracking-widest"
+        >
+          SYSTEM INTERFACE LOADING
+        </motion.p>
+      </motion.div>
+    </motion.div>
+  )
+}
 
 export default function Home() {
   const [showSplash, setShowSplash] = useState(true)
   const [activeSection, setActiveSection] = useState('inicio')
   const [isAssistantOpen, setIsAssistantOpen] = useState(false)
   const [aiState, setAiState] = useState<'idle' | 'thinking' | 'executing' | 'success'>('idle')
-  const { theme, setTheme } = useTheme()
+  const { theme } = useTheme()
   const { language, t } = useLanguage()
   const [mounted, setMounted] = useState(false)
   
-  // Section refs for scroll detection
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({})
 
-  // Prevent hydration mismatch
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  // Handle splash completion
-  const handleSplashComplete = () => {
-    setShowSplash(false)
-  }
-
-  // Navigate to section
+  // Smooth scroll navigation
   const handleNavigate = (section: string) => {
     setActiveSection(section)
     setIsAssistantOpen(false)
     
-    // Scroll to section
     const element = sectionRefs.current[section]
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
+      const offset = section === 'inicio' ? 0 : 80
+      window.scrollTo({
+        top: element.offsetTop - offset,
+        behavior: 'smooth',
+      })
     }
   }
 
-  // Handle V AI button click
+  // V AI interaction
   const handleVClick = () => {
     setIsAssistantOpen(true)
     setAiState('thinking')
-    setTimeout(() => setAiState('idle'), 1000)
+    setTimeout(() => setAiState('idle'), 1500)
   }
 
-  // Toggle theme
-  const handleThemeToggle = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark')
-  }
-  
-  // Get current theme (handle SSR)
-  const currentTheme = mounted ? theme : 'dark'
-
-  // Scroll detection for active section
+  // Scroll tracking
   useEffect(() => {
+    if (showSplash) return
+
     const handleScroll = () => {
-      const sections = ['inicio', 'proceso', 'integraciones', 'portfolio', 'demos', 'precios', 'contacto']
+      const scrollPosition = window.scrollY + window.innerHeight / 3
+      const sections = ['inicio', 'proceso', 'integraciones', 'galeria', 'demos', 'fuente', 'precios', 'contacto']
       
       for (const section of sections) {
         const element = sectionRefs.current[section]
         if (element) {
-          const rect = element.getBoundingClientRect()
-          if (rect.top <= 150 && rect.bottom >= 150) {
+          const { offsetTop, offsetHeight } = element
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
             setActiveSection(section)
             break
           }
@@ -90,159 +213,150 @@ export default function Home() {
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [showSplash])
 
   return (
     <>
-      {/* Splash Screen */}
-      <AnimatePresence>
-        {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
+      {/* Premium Splash */}
+      <AnimatePresence mode="wait">
+        {showSplash && <PremiumSplash onComplete={() => setShowSplash(false)} />}
       </AnimatePresence>
 
-      {/* Main App */}
-      {!showSplash && (
-        <div className="min-h-screen bg-background">
-          {/* Desktop Navigation */}
-          <DesktopNav
-            activeSection={activeSection}
-            onNavigate={handleNavigate}
-            onVClick={handleVClick}
-            aiState={aiState}
-            theme={currentTheme as 'dark' | 'light'}
-            onThemeToggle={handleThemeToggle}
-          />
+      {/* System Interface */}
+      <AnimatePresence>
+        {!showSplash && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            className="relative min-h-screen bg-black text-white overflow-x-hidden"
+          >
+            {/* Living Animated Background */}
+            <AnimatedBackground />
 
-          {/* Main Content */}
-          <main className="pb-24 md:pb-0">
-            {/* HERO CINEMATOGRAFICO - Full Screen */}
-            <section 
-              ref={(el) => { sectionRefs.current['inicio'] = el }}
-              id="inicio"
-            >
-              <HeroCinematic onNavigate={handleNavigate} />
-            </section>
+            {/* Top Navigation - Desktop */}
+            <TopNav
+              activeSection={activeSection}
+              onNavigate={handleNavigate}
+              onVClick={handleVClick}
+              aiState={aiState}
+            />
 
-            {/* PROCESO MOMENTUM */}
-            <section 
-              ref={(el) => { sectionRefs.current['proceso'] = el }}
-              id="proceso"
-            >
-              <ProcesoSection />
-            </section>
+            {/* Main System Content */}
+            <main className="relative z-10">
+              {/* HERO - Full Screen Cinematic */}
+              <section ref={(el) => { sectionRefs.current['inicio'] = el }} id="inicio">
+                <HeroPremium onNavigate={handleNavigate} />
+              </section>
 
-            {/* INTEGRACIONES GALLERY - Apple TV Style */}
-            <section 
-              ref={(el) => { sectionRefs.current['integraciones'] = el }}
-              id="integraciones"
-            >
-              <IntegrationsGallery />
-            </section>
+              {/* PROCESO - Momentum Flow */}
+              <section ref={(el) => { sectionRefs.current['proceso'] = el }} id="proceso">
+                <ProcesoSection />
+              </section>
 
-            {/* MARKETING SHOWCASE - Portfolio Grid */}
-            <section 
-              ref={(el) => { sectionRefs.current['portfolio'] = el }}
-              id="portfolio"
-            >
-              <MarketingShowcase />
-            </section>
+              {/* INTEGRACIONES - Interactive Ecosystem */}
+              <section ref={(el) => { sectionRefs.current['integraciones'] = el }} id="integraciones">
+                <IntegrationsEcosystem />
+              </section>
 
-            {/* DEMOS / CASOS DE USO */}
-            <section 
-              ref={(el) => { sectionRefs.current['demos'] = el }}
-              id="demos"
-            >
-              <DemosSection onNavigate={handleNavigate} />
-            </section>
+              {/* GALERIA - Marketing Materials */}
+              <section ref={(el) => { sectionRefs.current['galeria'] = el }} id="galeria">
+                <MarketingGallery />
+              </section>
 
-            {/* PRECIOS */}
-            <section 
-              ref={(el) => { sectionRefs.current['precios'] = el }}
-              id="precios"
-            >
-              <PricingSection onNavigate={handleNavigate} />
-            </section>
+              {/* DEMOS - Case Studies */}
+              <section ref={(el) => { sectionRefs.current['demos'] = el }} id="demos">
+                <DemosSection onNavigate={handleNavigate} />
+              </section>
 
-            {/* CONTACTO / DIAGNOSTICO */}
-            <section 
-              ref={(el) => { sectionRefs.current['contacto'] = el }}
-              id="contacto"
-            >
-              <ContactSection />
-            </section>
+              {/* FUENTE DE VERDAD */}
+              <section ref={(el) => { sectionRefs.current['fuente'] = el }} id="fuente">
+                <FuenteVerdadSection />
+              </section>
 
-            {/* Footer */}
-            <footer className="border-t border-border py-12 px-6 md:px-12 lg:px-20">
-              <div className="max-w-7xl mx-auto">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-                  {/* Logo */}
-                  <div className="flex items-center">
-                    <img 
+              {/* PRECIOS */}
+              <section ref={(el) => { sectionRefs.current['precios'] = el }} id="precios">
+                <PricingSection onNavigate={handleNavigate} />
+              </section>
+
+              {/* CONTACTO */}
+              <section ref={(el) => { sectionRefs.current['contacto'] = el }} id="contacto">
+                <ContactSection />
+              </section>
+
+              {/* FOOTER */}
+              <footer className="relative border-t border-white/10 py-16 px-6">
+                <div className="max-w-6xl mx-auto">
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+                    {/* Logo */}
+                    <motion.img 
                       src="/images/v-momentum-logo.jpeg" 
                       alt="V Momentum" 
-                      className="h-12 w-auto object-contain"
-                      style={{ filter: 'drop-shadow(0 0 20px rgba(59,130,246,0.3))' }}
+                      className="h-12 w-auto"
+                      style={{ filter: 'drop-shadow(0 0 30px rgba(59,130,246,0.4))' }}
+                      whileHover={{ scale: 1.05 }}
                     />
+
+                    {/* Nav Links */}
+                    <nav className="flex flex-wrap justify-center gap-6 text-sm">
+                      {['proceso', 'integraciones', 'galeria', 'demos', 'precios', 'contacto'].map((section) => (
+                        <motion.button
+                          key={section}
+                          onClick={() => handleNavigate(section)}
+                          className="text-white/50 hover:text-white transition-colors capitalize"
+                          whileHover={{ scale: 1.05 }}
+                        >
+                          {section === 'galeria' ? (language === 'es' ? 'Galería' : 'Gallery') : section}
+                        </motion.button>
+                      ))}
+                    </nav>
+
+                    {/* Copyright */}
+                    <p className="text-sm text-white/30">
+                      © {new Date().getFullYear()} V Momentum
+                    </p>
                   </div>
 
-                  {/* Links */}
-                  <nav className="flex flex-wrap items-center justify-center gap-6 text-sm">
-                    <button onClick={() => handleNavigate('proceso')} className="text-muted-foreground hover:text-foreground transition-colors">
-                      {t.nav.process}
-                    </button>
-                    <button onClick={() => handleNavigate('integraciones')} className="text-muted-foreground hover:text-foreground transition-colors">
-                      {t.nav.integrations}
-                    </button>
-                    <button onClick={() => handleNavigate('portfolio')} className="text-muted-foreground hover:text-foreground transition-colors">
-                      {language === 'es' ? 'Portafolio' : 'Portfolio'}
-                    </button>
-                    <button onClick={() => handleNavigate('demos')} className="text-muted-foreground hover:text-foreground transition-colors">
-                      {t.nav.demos}
-                    </button>
-                    <button onClick={() => handleNavigate('precios')} className="text-muted-foreground hover:text-foreground transition-colors">
-                      {t.nav.pricing}
-                    </button>
-                    <button onClick={() => handleNavigate('contacto')} className="text-muted-foreground hover:text-foreground transition-colors">
-                      {t.nav.contact}
-                    </button>
-                  </nav>
-
-                  {/* Copyright */}
-                  <div className="text-xs text-muted-foreground">
-                    © {new Date().getFullYear()} V Momentum. {language === 'es' ? 'Todos los derechos reservados.' : 'All rights reserved.'}
-                  </div>
+                  {/* Tagline */}
+                  <motion.div 
+                    className="text-center mt-12 pt-8 border-t border-white/5"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                  >
+                    <p className="text-lg text-white/40 italic">
+                      {language === 'es' ? '"No es magia. Es sistema."' : '"It\'s not magic. It\'s a system."'}
+                    </p>
+                    <p className="mt-3 text-sm font-medium bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                      V Momentum — All Global Holding
+                    </p>
+                  </motion.div>
                 </div>
+              </footer>
+            </main>
 
-                {/* Tagline */}
-                <div className="text-center mt-8 pt-8 border-t border-border">
-                  <p className="text-sm text-muted-foreground italic">
-                    {language === 'es' 
-                      ? '"No es magia. Es sistema."'
-                      : '"It\'s not magic. It\'s a system."'}
-                  </p>
-                  <p className="text-xs text-primary mt-2 font-medium">
-                    V Momentum — All Global Holding
-                  </p>
-                </div>
-              </div>
-            </footer>
-          </main>
+            {/* Bottom Navigation - Mobile Only */}
+            <div className="md:hidden">
+              <BottomNav
+                activeSection={activeSection}
+                onNavigate={handleNavigate}
+                onVClick={handleVClick}
+                aiState={aiState}
+              />
+            </div>
 
-          {/* Mobile Navigation */}
-          <MobileNav
-            activeSection={activeSection}
-            onNavigate={handleNavigate}
-            onVClick={handleVClick}
-            aiState={aiState}
-          />
+            {/* V Assistant Modal */}
+            <VAssistantModal
+              isOpen={isAssistantOpen}
+              onClose={() => setIsAssistantOpen(false)}
+              onNavigate={handleNavigate}
+            />
 
-          {/* V Assistant Panel */}
-          <VAssistantPanel
-            isOpen={isAssistantOpen}
-            onClose={() => setIsAssistantOpen(false)}
-            onNavigate={handleNavigate}
-          />
-        </div>
-      )}
+            {/* Mobile safe area */}
+            <div className="h-28 md:h-0" />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }
