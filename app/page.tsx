@@ -27,6 +27,21 @@ import { VAssistantModal } from '@/components/v-assistant-modal'
 // Language
 import { useLanguage } from '@/lib/i18n'
 
+// Deterministic particle positions to avoid hydration mismatch
+const SPLASH_PARTICLES = Array.from({ length: 30 }, (_, i) => ({
+  id: i,
+  left: (i * 31.7 + 13) % 100, // Deterministic spread
+  top: (i * 23.9 + 7) % 100,
+  delay: (i * 0.07) % 2,
+  duration: 3 + (i % 3),
+}))
+
+const ENERGY_WAVES = [
+  { size: 200, delay: 0 },
+  { size: 350, delay: 0.5 },
+  { size: 500, delay: 1 },
+]
+
 // Premium Splash Screen
 function PremiumSplash({ onComplete }: { onComplete: () => void }) {
   useEffect(() => {
@@ -40,39 +55,33 @@ function PremiumSplash({ onComplete }: { onComplete: () => void }) {
       exit={{ opacity: 0 }}
       transition={{ duration: 1 }}
     >
-      {/* Animated particles background */}
+      {/* Animated particles background - deterministic positions */}
       <div className="absolute inset-0">
-        {[...Array(50)].map((_, i) => (
+        {SPLASH_PARTICLES.map((p) => (
           <motion.div
-            key={i}
+            key={p.id}
             className="absolute w-1 h-1 bg-blue-500/50 rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
+            style={{ left: `${p.left}%`, top: `${p.top}%` }}
             animate={{
               y: [0, -100, 0],
               opacity: [0, 1, 0],
               scale: [0, 1.5, 0],
             }}
             transition={{
-              duration: 3 + Math.random() * 2,
+              duration: p.duration,
               repeat: Infinity,
-              delay: Math.random() * 2,
+              delay: p.delay,
             }}
           />
         ))}
       </div>
 
       {/* Energy waves */}
-      {[...Array(3)].map((_, i) => (
+      {ENERGY_WAVES.map((wave, i) => (
         <motion.div
           key={i}
           className="absolute rounded-full border border-blue-500/20"
-          style={{
-            width: 200 + i * 150,
-            height: 200 + i * 150,
-          }}
+          style={{ width: wave.size, height: wave.size }}
           animate={{
             scale: [1, 2, 1],
             opacity: [0.3, 0, 0.3],
@@ -80,7 +89,7 @@ function PremiumSplash({ onComplete }: { onComplete: () => void }) {
           transition={{
             duration: 3,
             repeat: Infinity,
-            delay: i * 0.5,
+            delay: wave.delay,
           }}
         />
       ))}
@@ -230,6 +239,7 @@ export default function Home() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
             className="relative min-h-screen bg-black text-white overflow-x-hidden"
+            style={{ position: 'relative' }}
           >
             {/* Living Animated Background */}
             <AnimatedBackground />
