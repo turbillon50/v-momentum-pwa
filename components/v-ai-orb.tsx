@@ -168,7 +168,7 @@ export function VAIOrb({ isOpen, onToggle, onNavigate }: VAIOrbProps) {
                   className="w-full h-full"
                 >
                   <img
-                    src="/images/v-ai-avatar.jpeg"
+                    src="/v-ai-icon.jpeg"
                     alt="V AI Assistant"
                     className="w-full h-full object-cover"
                   />
@@ -235,7 +235,7 @@ export function VAIOrb({ isOpen, onToggle, onNavigate }: VAIOrbProps) {
                     }}
                     transition={{ duration: 3, repeat: Infinity }}
                   >
-                    <img src="/images/v-ai-avatar.jpeg" alt="V AI" className="w-full h-full object-cover" />
+                    <img src="/v-ai-icon.jpeg" alt="V AI" className="w-full h-full object-cover" />
                   </motion.div>
                   <div>
                     <h3 className="font-semibold text-foreground">V Assistant</h3>

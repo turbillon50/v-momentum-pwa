@@ -132,26 +132,25 @@ export function AppShell() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
-            {/* Real Brand Logo */}
+            {/* Real Brand Logo - V Momentum */}
             <motion.div 
-              className="flex items-center gap-3 cursor-pointer"
+              className="cursor-pointer"
               onClick={() => navigateTo('home')}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
               <motion.img
-                src="/images/v-momentum-logo.jpeg"
+                src="/brand-logo.jpeg"
                 alt="V Momentum"
-                className="h-10 w-auto rounded-lg"
+                className="h-10 w-auto"
                 animate={{
                   filter: [
-                    'drop-shadow(0 0 8px rgba(59,130,246,0.4))',
-                    'drop-shadow(0 0 12px rgba(139,92,246,0.4))',
-                    'drop-shadow(0 0 8px rgba(6,182,212,0.4))',
-                    'drop-shadow(0 0 8px rgba(59,130,246,0.4))',
+                    'drop-shadow(0 0 12px rgba(59,130,246,0.5))',
+                    'drop-shadow(0 0 20px rgba(59,130,246,0.7))',
+                    'drop-shadow(0 0 12px rgba(59,130,246,0.5))',
                   ],
                 }}
-                transition={{ duration: 4, repeat: Infinity }}
+                transition={{ duration: 2, repeat: Infinity }}
               />
             </motion.div>
 
@@ -318,36 +317,35 @@ export function AppShell() {
               </motion.button>
             ))}
 
-            {/* Center V AI Button - Real Avatar with Energy Ring */}
+            {/* Center V AI Button - Real AI Icon with Energy Ring */}
             <div className="relative -mt-8">
-              {/* Rotating energy ring */}
+              {/* Rotating energy ring - matches the AI icon style */}
               <motion.div
-                className="absolute inset-[-4px] rounded-full"
+                className="absolute inset-[-6px] rounded-full"
                 style={{
-                  background: 'conic-gradient(from 0deg, #3b82f6, #8b5cf6, #06b6d4, #3b82f6)',
-                  padding: '3px',
+                  background: 'conic-gradient(from 0deg, #3b82f6 0%, #60a5fa 25%, #93c5fd 50%, #60a5fa 75%, #3b82f6 100%)',
+                  padding: '2px',
                 }}
                 animate={{ rotate: 360 }}
-                transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
               >
                 <div className="w-full h-full rounded-full bg-black" />
               </motion.div>
               <motion.button
                 onClick={() => setIsVAIOpen(!isVAIOpen)}
-                className="relative w-16 h-16 rounded-full overflow-hidden shadow-lg"
+                className="relative w-16 h-16 rounded-full overflow-hidden"
                 animate={{
                   boxShadow: [
-                    '0 0 20px rgba(59,130,246,0.5)',
-                    '0 0 35px rgba(139,92,246,0.6)',
-                    '0 0 20px rgba(6,182,212,0.5)',
-                    '0 0 20px rgba(59,130,246,0.5)',
+                    '0 0 25px rgba(59,130,246,0.6)',
+                    '0 0 40px rgba(59,130,246,0.8)',
+                    '0 0 25px rgba(59,130,246,0.6)',
                   ],
                 }}
-                transition={{ duration: 3, repeat: Infinity }}
+                transition={{ duration: 2, repeat: Infinity }}
                 whileTap={{ scale: 0.9 }}
               >
                 <img
-                  src="/images/v-ai-avatar.jpeg"
+                  src="/v-ai-icon.jpeg"
                   alt="V AI Assistant"
                   className="w-full h-full object-cover"
                 />

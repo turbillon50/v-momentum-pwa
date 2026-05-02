@@ -97,22 +97,22 @@ function PremiumSplash({ onComplete }: { onComplete: () => void }) {
           }}
           transition={{ duration: 3, repeat: Infinity }}
         >
-          {/* Rotating energy ring around logo */}
+          {/* Rotating energy ring - matches the AI icon blue glow style */}
           <motion.div
-            className="absolute inset-[-6px] rounded-2xl"
+            className="absolute inset-[-8px] rounded-xl"
             style={{
-              background: 'conic-gradient(from 0deg, #3b82f6, #8b5cf6, #06b6d4, #3b82f6)',
+              background: 'conic-gradient(from 0deg, #3b82f6 0%, #60a5fa 25%, #93c5fd 50%, #60a5fa 75%, #3b82f6 100%)',
               padding: '2px',
             }}
             animate={{ rotate: 360 }}
-            transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
           >
-            <div className="w-full h-full rounded-2xl bg-black" />
+            <div className="w-full h-full rounded-xl bg-black" />
           </motion.div>
           <img
-            src="/images/v-momentum-logo.jpeg"
+            src="/brand-logo.jpeg"
             alt="V Momentum"
-            className="relative z-10 h-24 w-auto rounded-2xl"
+            className="relative z-10 h-32 w-auto"
           />
         </motion.div>
 
