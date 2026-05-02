@@ -141,9 +141,9 @@ export function VAIOrb({ isOpen, onToggle, onNavigate }: VAIOrbProps) {
             />
           </motion.div>
 
-          {/* Inner orb */}
+          {/* Inner orb - Real AI Avatar */}
           <motion.div
-            className="relative z-10 w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-cyan-400 flex items-center justify-center"
+            className="relative z-10 w-14 h-14 rounded-full overflow-hidden"
             animate={{
               scale: isOpen ? 0.9 : 1,
             }}
@@ -155,19 +155,24 @@ export function VAIOrb({ isOpen, onToggle, onNavigate }: VAIOrbProps) {
                   initial={{ rotate: -90, opacity: 0 }}
                   animate={{ rotate: 0, opacity: 1 }}
                   exit={{ rotate: 90, opacity: 0 }}
+                  className="w-full h-full bg-gradient-to-br from-blue-500 via-purple-500 to-cyan-400 flex items-center justify-center"
                 >
                   <X className="w-6 h-6 text-white" />
                 </motion.div>
               ) : (
-                <motion.span
-                  key="v"
+                <motion.div
+                  key="avatar"
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   exit={{ scale: 0 }}
-                  className="text-white font-bold text-2xl"
+                  className="w-full h-full"
                 >
-                  V
-                </motion.span>
+                  <img
+                    src="/images/v-ai-avatar.jpeg"
+                    alt="V AI Assistant"
+                    className="w-full h-full object-cover"
+                  />
+                </motion.div>
               )}
             </AnimatePresence>
           </motion.div>
@@ -219,7 +224,7 @@ export function VAIOrb({ isOpen, onToggle, onNavigate }: VAIOrbProps) {
               <div className="p-4 border-b border-border">
                 <div className="flex items-center gap-3">
                   <motion.div
-                    className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-cyan-400 flex items-center justify-center"
+                    className="w-10 h-10 rounded-xl overflow-hidden"
                     animate={{
                       boxShadow: [
                         '0 0 15px rgba(59,130,246,0.5)',
@@ -230,7 +235,7 @@ export function VAIOrb({ isOpen, onToggle, onNavigate }: VAIOrbProps) {
                     }}
                     transition={{ duration: 3, repeat: Infinity }}
                   >
-                    <Sparkles className="w-5 h-5 text-white" />
+                    <img src="/images/v-ai-avatar.jpeg" alt="V AI" className="w-full h-full object-cover" />
                   </motion.div>
                   <div>
                     <h3 className="font-semibold text-foreground">V Assistant</h3>

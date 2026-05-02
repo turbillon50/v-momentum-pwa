@@ -132,33 +132,27 @@ export function AppShell() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
-            {/* Logo */}
+            {/* Real Brand Logo */}
             <motion.div 
               className="flex items-center gap-3 cursor-pointer"
               onClick={() => navigateTo('home')}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div className="relative">
-                <motion.div
-                  className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-cyan-400 flex items-center justify-center"
-                  animate={{
-                    boxShadow: [
-                      '0 0 20px rgba(59,130,246,0.5)',
-                      '0 0 30px rgba(139,92,246,0.5)',
-                      '0 0 20px rgba(6,182,212,0.5)',
-                      '0 0 20px rgba(59,130,246,0.5)',
-                    ],
-                  }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                >
-                  <span className="text-white font-bold text-xl">V</span>
-                </motion.div>
-              </div>
-              <div className="hidden sm:block">
-                <p className="font-semibold text-foreground">Momentum</p>
-                <p className="text-[10px] text-muted-foreground tracking-wider">SaaS Apps Factory</p>
-              </div>
+              <motion.img
+                src="/images/v-momentum-logo.jpeg"
+                alt="V Momentum"
+                className="h-10 w-auto rounded-lg"
+                animate={{
+                  filter: [
+                    'drop-shadow(0 0 8px rgba(59,130,246,0.4))',
+                    'drop-shadow(0 0 12px rgba(139,92,246,0.4))',
+                    'drop-shadow(0 0 8px rgba(6,182,212,0.4))',
+                    'drop-shadow(0 0 8px rgba(59,130,246,0.4))',
+                  ],
+                }}
+                transition={{ duration: 4, repeat: Infinity }}
+              />
             </motion.div>
 
             {/* Desktop Navigation */}
@@ -324,15 +318,27 @@ export function AppShell() {
               </motion.button>
             ))}
 
-            {/* Center V AI Button */}
+            {/* Center V AI Button - Real Avatar with Energy Ring */}
             <div className="relative -mt-8">
+              {/* Rotating energy ring */}
+              <motion.div
+                className="absolute inset-[-4px] rounded-full"
+                style={{
+                  background: 'conic-gradient(from 0deg, #3b82f6, #8b5cf6, #06b6d4, #3b82f6)',
+                  padding: '3px',
+                }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
+              >
+                <div className="w-full h-full rounded-full bg-black" />
+              </motion.div>
               <motion.button
                 onClick={() => setIsVAIOpen(!isVAIOpen)}
-                className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-cyan-400 flex items-center justify-center shadow-lg"
+                className="relative w-16 h-16 rounded-full overflow-hidden shadow-lg"
                 animate={{
                   boxShadow: [
                     '0 0 20px rgba(59,130,246,0.5)',
-                    '0 0 40px rgba(139,92,246,0.5)',
+                    '0 0 35px rgba(139,92,246,0.6)',
                     '0 0 20px rgba(6,182,212,0.5)',
                     '0 0 20px rgba(59,130,246,0.5)',
                   ],
@@ -340,7 +346,11 @@ export function AppShell() {
                 transition={{ duration: 3, repeat: Infinity }}
                 whileTap={{ scale: 0.9 }}
               >
-                <span className="text-white font-bold text-2xl">V</span>
+                <img
+                  src="/images/v-ai-avatar.jpeg"
+                  alt="V AI Assistant"
+                  className="w-full h-full object-cover"
+                />
               </motion.button>
             </div>
 

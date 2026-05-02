@@ -84,7 +84,7 @@ function PremiumSplash({ onComplete }: { onComplete: () => void }) {
         transition={{ duration: 0.5, type: 'spring' }}
         className="relative z-10 flex flex-col items-center"
       >
-        {/* Logo V with glow */}
+        {/* Real Brand Logo with glow */}
         <motion.div
           className="relative"
           animate={{
@@ -97,9 +97,23 @@ function PremiumSplash({ onComplete }: { onComplete: () => void }) {
           }}
           transition={{ duration: 3, repeat: Infinity }}
         >
-          <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-500 to-cyan-400 flex items-center justify-center">
-            <span className="text-white font-bold text-5xl">V</span>
-          </div>
+          {/* Rotating energy ring around logo */}
+          <motion.div
+            className="absolute inset-[-6px] rounded-2xl"
+            style={{
+              background: 'conic-gradient(from 0deg, #3b82f6, #8b5cf6, #06b6d4, #3b82f6)',
+              padding: '2px',
+            }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+          >
+            <div className="w-full h-full rounded-2xl bg-black" />
+          </motion.div>
+          <img
+            src="/images/v-momentum-logo.jpeg"
+            alt="V Momentum"
+            className="relative z-10 h-24 w-auto rounded-2xl"
+          />
         </motion.div>
 
         {/* Brand name */}
@@ -109,8 +123,7 @@ function PremiumSplash({ onComplete }: { onComplete: () => void }) {
           transition={{ delay: 0.3 }}
           className="mt-6 text-center"
         >
-          <h1 className="text-2xl font-semibold text-white">Momentum</h1>
-          <p className="text-xs text-white/40 tracking-[0.3em] uppercase mt-1">SaaS Apps Factory</p>
+          <p className="text-xs text-white/40 tracking-[0.3em] uppercase mt-1">SaaS Technology Apps Design</p>
         </motion.div>
 
         {/* Loading bar */}
