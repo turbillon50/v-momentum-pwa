@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
 
 interface BrandLogoAnimatedProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'hero'
@@ -16,12 +17,26 @@ const sizes = {
   hero: { logo: 'h-56 md:h-72', ring: 320, ringWidth: 6 },
 }
 
+// Pre-calculated particle positions for deterministic rendering
+const ENERGY_PARTICLES = [
+  { angle: 0, delay: 0 },
+  { angle: 72, delay: 0.3 },
+  { angle: 144, delay: 0.6 },
+  { angle: 216, delay: 0.9 },
+  { angle: 288, delay: 1.2 },
+]
+
 export function BrandLogoAnimated({ 
   size = 'lg', 
   showTagline = false,
   className = '' 
 }: BrandLogoAnimatedProps) {
   const config = sizes[size]
+  const [mounted, setMounted] = useState(false)
+  
+  useEffect(() => {
+    setMounted(true)
+  }, [])
   
   return (
     <div className={`relative flex flex-col items-center justify-center ${className}`}>
