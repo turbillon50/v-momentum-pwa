@@ -20,6 +20,10 @@ import { PricingSection } from '@/components/sections/pricing-section'
 import { DemosSection } from '@/components/sections/demos-section'
 import { FuenteVerdadSection } from '@/components/sections/fuente-verdad-section'
 import { ContactSection } from '@/components/sections/contact-section'
+import { FAQSection } from '@/components/sections/faq-section'
+
+// Brand Logo
+import { BrandLogoAnimated } from '@/components/brand-logo-animated'
 
 // V Assistant
 import { VAssistantModal } from '@/components/v-assistant-modal'
@@ -94,42 +98,14 @@ function PremiumSplash({ onComplete }: { onComplete: () => void }) {
         />
       ))}
 
-      {/* Logo container */}
+      {/* Animated Logo with Energy Ring */}
       <motion.div
         initial={{ scale: 0.5, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1, type: 'spring' }}
         className="relative z-10 flex flex-col items-center"
       >
-        {/* Glow effect */}
-        <motion.div
-          className="absolute inset-0 blur-[100px] -z-10"
-          animate={{
-            background: [
-              'radial-gradient(circle, rgba(59,130,246,0.4) 0%, transparent 70%)',
-              'radial-gradient(circle, rgba(139,92,246,0.4) 0%, transparent 70%)',
-              'radial-gradient(circle, rgba(6,182,212,0.4) 0%, transparent 70%)',
-              'radial-gradient(circle, rgba(59,130,246,0.4) 0%, transparent 70%)',
-            ],
-          }}
-          transition={{ duration: 3, repeat: Infinity }}
-        />
-        
-        {/* Logo */}
-        <motion.img
-          src="/images/v-momentum-logo.jpeg"
-          alt="V Momentum"
-          className="h-40 md:h-56 w-auto"
-          animate={{
-            filter: [
-              'drop-shadow(0 0 60px rgba(59,130,246,0.6))',
-              'drop-shadow(0 0 80px rgba(139,92,246,0.6))',
-              'drop-shadow(0 0 60px rgba(6,182,212,0.6))',
-              'drop-shadow(0 0 60px rgba(59,130,246,0.6))',
-            ],
-          }}
-          transition={{ duration: 3, repeat: Infinity }}
-        />
+        <BrandLogoAnimated size="hero" />
         
         {/* Loading bar */}
         <motion.div
@@ -206,7 +182,7 @@ export default function Home() {
 
     const handleScroll = () => {
       const scrollPosition = window.scrollY + window.innerHeight / 3
-      const sections = ['inicio', 'proceso', 'integraciones', 'galeria', 'demos', 'fuente', 'precios', 'contacto']
+      const sections = ['inicio', 'proceso', 'integraciones', 'galeria', 'demos', 'fuente', 'faq', 'precios', 'contacto']
       
       for (const section of sections) {
         const element = sectionRefs.current[section]
@@ -282,6 +258,11 @@ export default function Home() {
               {/* FUENTE DE VERDAD */}
               <section ref={(el) => { sectionRefs.current['fuente'] = el }} id="fuente">
                 <FuenteVerdadSection />
+              </section>
+
+              {/* FAQ - Preguntas Frecuentes */}
+              <section ref={(el) => { sectionRefs.current['faq'] = el }} id="faq">
+                <FAQSection />
               </section>
 
               {/* PRECIOS */}

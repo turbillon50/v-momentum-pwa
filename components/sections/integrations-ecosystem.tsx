@@ -3,7 +3,8 @@
 import { useState, useRef } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { GlassCard } from '@/components/ui/glass-card'
-import { X, ExternalLink, ChevronLeft, ChevronRight, Zap, Database, Bot, Globe, Wallet, Shield, Code, Cloud } from 'lucide-react'
+import { ZoomableLightbox } from '@/components/ui/zoomable-lightbox'
+import { ExternalLink, Zap, Database, Bot, Globe, Wallet, Shield, Code, Cloud, ZoomIn } from 'lucide-react'
 import { useLanguage } from '@/lib/i18n'
 
 // Integration data organized by category
@@ -97,13 +98,28 @@ const integrationCategories = [
 export function IntegrationsEcosystem() {
   const { t, language } = useLanguage()
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [selectedIntegration, setSelectedIntegration] = useState<{
-    name: string
-    image: string
-    description: string
-  } | null>(null)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null)
+  const [selectedIntegrationIndex, setSelectedIntegrationIndex] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
   const isInView = useInView(containerRef, { once: true, margin: '-100px' })
+
+  // Get all images for lightbox from selected category
+  const getLightboxImages = (categoryId: string) => {
+    const category = integrationCategories.find(c => c.id === categoryId)
+    if (!category) return []
+    return category.items.map(item => ({
+      src: item.image,
+      title: item.name,
+      category: categoryLabels[categoryId][language],
+    }))
+  }
+
+  const openLightbox = (categoryId: string, index: number) => {
+    setSelectedCategoryId(categoryId)
+    setSelectedIntegrationIndex(index)
+    setLightboxOpen(true)
+  }
 
   const categoryLabels: Record<string, { es: string; en: string }> = {
     payments: { es: 'Pagos', en: 'Payments' },
@@ -209,7 +225,7 @@ export function IntegrationsEcosystem() {
                   {category.items.map((item, i) => (
                     <GlassCard
                       key={item.name}
-                      onClick={() => setSelectedIntegration(item)}
+                      onClick={() => openLightbox(category.id, i)}
                       className="flex-shrink-0 w-72 md:w-80 p-1 cursor-pointer"
                       glowColor={
                         category.id === 'payments' ? 'green' :
@@ -241,13 +257,13 @@ export function IntegrationsEcosystem() {
                           <p className="text-sm text-white/60 line-clamp-1">{item.description}</p>
                         </div>
 
-                        {/* Hover effect - View button */}
+                        {/* Hover effect - Zoom button */}
                         <motion.div
                           className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity"
                         >
                           <span className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white text-sm font-medium">
-                            {language === 'es' ? 'Ver detalle' : 'View details'}
-                            <ExternalLink className="w-4 h-4" />
+                            <ZoomIn className="w-4 h-4" />
+                            {language === 'es' ? 'Ver con zoom' : 'View with zoom'}
                           </span>
                         </motion.div>
                       </motion.div>
@@ -263,43 +279,19 @@ export function IntegrationsEcosystem() {
           ))}
       </div>
 
-      {/* Integration detail modal */}
-      <AnimatePresence>
-        {selectedIntegration && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl"
-            onClick={() => setSelectedIntegration(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, y: 50 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 50 }}
-              className="relative w-full max-w-4xl max-h-[90vh] overflow-auto rounded-3xl bg-gradient-to-br from-white/10 to-white/[0.02] border border-white/10 backdrop-blur-2xl"
-              onClick={e => e.stopPropagation()}
-            >
-              {/* Close button */}
-              <button
-                onClick={() => setSelectedIntegration(null)}
-                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-              >
-                <X className="w-5 h-5 text-white" />
-              </button>
-
-              {/* Full image */}
-              <div className="relative">
-                <img
-                  src={selectedIntegration.image}
-                  alt={selectedIntegration.name}
-                  className="w-full h-auto"
-                />
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Zoomable Lightbox */}
+      {selectedCategoryId && (
+        <ZoomableLightbox
+          isOpen={lightboxOpen}
+          onClose={() => {
+            setLightboxOpen(false)
+            setSelectedCategoryId(null)
+          }}
+          images={getLightboxImages(selectedCategoryId)}
+          currentIndex={selectedIntegrationIndex}
+          onNavigate={(index) => setSelectedIntegrationIndex(index)}
+        />
+      )}
     </section>
   )
 }

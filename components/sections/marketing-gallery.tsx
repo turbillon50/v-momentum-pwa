@@ -3,7 +3,8 @@
 import { useState, useRef } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { GlassCard } from '@/components/ui/glass-card'
-import { X, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react'
+import { ZoomableLightbox } from '@/components/ui/zoomable-lightbox'
+import { Maximize2, ZoomIn } from 'lucide-react'
 import { useLanguage } from '@/lib/i18n'
 
 const galleryItems = [
@@ -163,10 +164,11 @@ export function MarketingGallery() {
                       <p className="text-sm font-medium text-white">{item.title[language]}</p>
                     </div>
 
-                    {/* Expand icon */}
+                    {/* Zoom icon */}
                     <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <div className="p-2 rounded-lg bg-black/50 backdrop-blur-sm">
-                        <Maximize2 className="w-4 h-4 text-white" />
+                      <div className="p-2 rounded-lg bg-black/50 backdrop-blur-sm flex items-center gap-1.5">
+                        <ZoomIn className="w-4 h-4 text-white" />
+                        <span className="text-xs text-white/70">Zoom</span>
                       </div>
                     </div>
                   </div>
@@ -177,60 +179,18 @@ export function MarketingGallery() {
         </motion.div>
       </div>
 
-      {/* Lightbox */}
-      <AnimatePresence>
-        {selectedImage && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl"
-            onClick={() => setSelectedImage(null)}
-          >
-            {/* Navigation buttons */}
-            <button
-              onClick={(e) => { e.stopPropagation(); navigateImage('prev') }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
-            >
-              <ChevronLeft className="w-6 h-6 text-white" />
-            </button>
-            <button
-              onClick={(e) => { e.stopPropagation(); navigateImage('next') }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
-            >
-              <ChevronRight className="w-6 h-6 text-white" />
-            </button>
-
-            {/* Close button */}
-            <button
-              onClick={() => setSelectedImage(null)}
-              className="absolute top-4 right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
-            >
-              <X className="w-6 h-6 text-white" />
-            </button>
-
-            {/* Image */}
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="relative max-w-6xl max-h-[85vh] w-full"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <img
-                src={selectedImage.image}
-                alt={selectedImage.title[language]}
-                className="w-full h-full object-contain rounded-2xl"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent rounded-b-2xl">
-                <p className="text-lg font-medium text-white text-center">
-                  {selectedImage.title[language]}
-                </p>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Zoomable Lightbox */}
+      <ZoomableLightbox
+        isOpen={!!selectedImage}
+        onClose={() => setSelectedImage(null)}
+        images={filteredItems.map(item => ({
+          src: item.image,
+          title: item.title[language],
+          category: item.category,
+        }))}
+        currentIndex={selectedImage ? filteredItems.findIndex(item => item.id === selectedImage.id) : 0}
+        onNavigate={(index) => setSelectedImage(filteredItems[index])}
+      />
     </section>
   )
 }
