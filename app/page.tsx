@@ -4,34 +4,22 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { AppShell } from '@/components/app-shell'
 
-// Deterministic particle positions to avoid hydration mismatch
-const SPLASH_PARTICLES = Array.from({ length: 25 }, (_, i) => ({
-  id: i,
-  left: (i * 31.7 + 13) % 100,
-  top: (i * 23.9 + 7) % 100,
-  delay: (i * 0.08) % 2,
-  duration: 3 + (i % 3),
-}))
-
-// Premium Splash Screen
+// Premium Splash - Shows brand with showcase of what we build
 function PremiumSplash({ onComplete }: { onComplete: () => void }) {
-  const [progress, setProgress] = useState(0)
+  const [phase, setPhase] = useState<'logo' | 'showcase' | 'ready'>('logo')
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(interval)
-          return 100
-        }
-        return prev + 2
-      })
-    }, 40)
-
-    const timer = setTimeout(onComplete, 2200)
+    // Phase 1: Show logo (1s)
+    const timer1 = setTimeout(() => setPhase('showcase'), 1000)
+    // Phase 2: Show showcase (1.5s)  
+    const timer2 = setTimeout(() => setPhase('ready'), 2500)
+    // Complete
+    const timer3 = setTimeout(onComplete, 3000)
+    
     return () => {
-      clearTimeout(timer)
-      clearInterval(interval)
+      clearTimeout(timer1)
+      clearTimeout(timer2)
+      clearTimeout(timer3)
     }
   }, [onComplete])
 
@@ -39,117 +27,117 @@ function PremiumSplash({ onComplete }: { onComplete: () => void }) {
     <motion.div
       className="fixed inset-0 z-[200] bg-black flex items-center justify-center overflow-hidden"
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.6 }}
+      transition={{ duration: 0.8 }}
     >
       {/* Ambient glow */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full"
-          style={{
-            background: 'radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%)',
-          }}
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.5, 0.8, 0.5],
-          }}
-          transition={{ duration: 3, repeat: Infinity }}
-        />
-      </div>
-
-      {/* Particles */}
-      <div className="absolute inset-0">
-        {SPLASH_PARTICLES.map((p) => (
-          <motion.div
-            key={p.id}
-            className="absolute w-1 h-1 bg-blue-500/40 rounded-full"
-            style={{ left: `${p.left}%`, top: `${p.top}%` }}
-            animate={{
-              y: [0, -80, 0],
-              opacity: [0, 0.8, 0],
-              scale: [0, 1, 0],
-            }}
-            transition={{
-              duration: p.duration,
-              repeat: Infinity,
-              delay: p.delay,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Logo and Loading */}
       <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.5, type: 'spring' }}
-        className="relative z-10 flex flex-col items-center"
-      >
-        {/* Real Brand Logo with glow */}
-        <motion.div
-          className="relative"
-          animate={{
-            filter: [
-              'drop-shadow(0 0 40px rgba(59,130,246,0.6))',
-              'drop-shadow(0 0 60px rgba(139,92,246,0.6))',
-              'drop-shadow(0 0 40px rgba(6,182,212,0.6))',
-              'drop-shadow(0 0 40px rgba(59,130,246,0.6))',
-            ],
-          }}
-          transition={{ duration: 3, repeat: Infinity }}
-        >
-          {/* Rotating energy ring - matches the AI icon blue glow style */}
+        className="absolute inset-0"
+        style={{
+          background: 'radial-gradient(ellipse at center, rgba(59,130,246,0.08) 0%, transparent 60%)',
+        }}
+        animate={{
+          opacity: [0.5, 1, 0.5],
+        }}
+        transition={{ duration: 3, repeat: Infinity }}
+      />
+
+      <AnimatePresence mode="wait">
+        {phase === 'logo' && (
           <motion.div
-            className="absolute inset-[-8px] rounded-xl"
-            style={{
-              background: 'conic-gradient(from 0deg, #3b82f6 0%, #60a5fa 25%, #93c5fd 50%, #60a5fa 75%, #3b82f6 100%)',
-              padding: '2px',
-            }}
-            animate={{ rotate: 360 }}
-            transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+            key="logo"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 1.1, opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col items-center"
           >
-            <div className="w-full h-full rounded-xl bg-black" />
+            {/* Rotating energy ring */}
+            <div className="relative">
+              <motion.div
+                className="absolute inset-[-12px] rounded-2xl"
+                style={{
+                  background: 'conic-gradient(from 0deg, #3b82f6 0%, #60a5fa 25%, transparent 50%, #60a5fa 75%, #3b82f6 100%)',
+                  padding: '2px',
+                }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+              >
+                <div className="w-full h-full rounded-2xl bg-black" />
+              </motion.div>
+              <motion.img
+                src="/brand-logo.jpeg"
+                alt="V Momentum"
+                className="relative z-10 h-28 w-auto"
+                animate={{
+                  filter: [
+                    'drop-shadow(0 0 30px rgba(59,130,246,0.5))',
+                    'drop-shadow(0 0 50px rgba(59,130,246,0.7))',
+                    'drop-shadow(0 0 30px rgba(59,130,246,0.5))',
+                  ],
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+            </div>
           </motion.div>
-          <img
-            src="/brand-logo.jpeg"
-            alt="V Momentum"
-            className="relative z-10 h-32 w-auto"
-          />
-        </motion.div>
+        )}
 
-        {/* Brand name */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="mt-6 text-center"
-        >
-          <p className="text-xs text-white/40 tracking-[0.3em] uppercase mt-1">SaaS Technology Apps Design</p>
-        </motion.div>
-
-        {/* Loading bar */}
-        <motion.div
-          initial={{ opacity: 0, width: 0 }}
-          animate={{ opacity: 1, width: 160 }}
-          transition={{ delay: 0.5 }}
-          className="mt-8 h-1 bg-white/10 rounded-full overflow-hidden"
-        >
+        {phase === 'showcase' && (
           <motion.div
-            className="h-full rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-400"
-            style={{ width: `${progress}%` }}
-            transition={{ duration: 0.1 }}
-          />
-        </motion.div>
+            key="showcase"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col items-center px-6 max-w-lg"
+          >
+            {/* Hero showcase image - shows what we build */}
+            <motion.img
+              src="/hero-showcase.jpeg"
+              alt="V Momentum - Apps que construimos"
+              className="w-full max-w-md rounded-xl"
+              animate={{
+                filter: [
+                  'drop-shadow(0 0 20px rgba(59,130,246,0.3))',
+                  'drop-shadow(0 0 40px rgba(59,130,246,0.5))',
+                  'drop-shadow(0 0 20px rgba(59,130,246,0.3))',
+                ],
+              }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+          </motion.div>
+        )}
 
-        {/* Status */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
-          className="mt-4 text-xs text-white/30 tracking-wider"
-        >
-          {progress < 100 ? 'INITIALIZING SYSTEM' : 'READY'}
-        </motion.p>
-      </motion.div>
+        {phase === 'ready' && (
+          <motion.div
+            key="ready"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col items-center"
+          >
+            <motion.img
+              src="/v-ai-icon.jpeg"
+              alt="V AI"
+              className="w-20 h-20 rounded-full"
+              animate={{
+                boxShadow: [
+                  '0 0 30px rgba(59,130,246,0.5)',
+                  '0 0 50px rgba(59,130,246,0.8)',
+                  '0 0 30px rgba(59,130,246,0.5)',
+                ],
+              }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            />
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="mt-4 text-sm text-blue-400 tracking-wider"
+            >
+              SISTEMA LISTO
+            </motion.p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   )
 }
@@ -162,21 +150,16 @@ export default function Home() {
     setMounted(true)
   }, [])
 
-  // Don't render anything until mounted to avoid hydration issues
   if (!mounted) {
-    return (
-      <div className="min-h-screen bg-black" />
-    )
+    return <div className="min-h-screen bg-black" />
   }
 
   return (
     <>
-      {/* Splash Screen */}
       <AnimatePresence mode="wait">
         {showSplash && <PremiumSplash onComplete={() => setShowSplash(false)} />}
       </AnimatePresence>
 
-      {/* Main App */}
       <AnimatePresence>
         {!showSplash && (
           <motion.div
