@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
 
 interface BrandLogoAnimatedProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'hero'
@@ -16,12 +17,26 @@ const sizes = {
   hero: { logo: 'h-56 md:h-72', ring: 320, ringWidth: 6 },
 }
 
+// Pre-calculated particle positions for deterministic rendering
+const ENERGY_PARTICLES = [
+  { angle: 0, delay: 0 },
+  { angle: 72, delay: 0.3 },
+  { angle: 144, delay: 0.6 },
+  { angle: 216, delay: 0.9 },
+  { angle: 288, delay: 1.2 },
+]
+
 export function BrandLogoAnimated({ 
   size = 'lg', 
   showTagline = false,
   className = '' 
 }: BrandLogoAnimatedProps) {
   const config = sizes[size]
+  const [mounted, setMounted] = useState(false)
+  
+  useEffect(() => {
+    setMounted(true)
+  }, [])
   
   return (
     <div className={`relative flex flex-col items-center justify-center ${className}`}>
@@ -111,38 +126,37 @@ export function BrandLogoAnimated({
           />
         </motion.svg>
 
-        {/* Energy particles on ring */}
-        {[0, 72, 144, 216, 288].map((angle, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 rounded-full bg-blue-400"
-            style={{
-              left: '50%',
-              top: '50%',
-              marginLeft: -4,
-              marginTop: -4,
-              boxShadow: '0 0 10px #3b82f6, 0 0 20px #3b82f6',
-            }}
-            animate={{
-              x: [
-                Math.cos((angle * Math.PI) / 180) * (config.ring / 2 - 10),
-                Math.cos(((angle + 360) * Math.PI) / 180) * (config.ring / 2 - 10),
-              ],
-              y: [
-                Math.sin((angle * Math.PI) / 180) * (config.ring / 2 - 10),
-                Math.sin(((angle + 360) * Math.PI) / 180) * (config.ring / 2 - 10),
-              ],
-              scale: [1, 1.5, 1],
-              opacity: [0.8, 1, 0.8],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: 'linear',
-              delay: i * 0.3,
-            }}
-          />
-        ))}
+        {/* Energy particles on ring - only render after mount to avoid hydration issues */}
+        {mounted && ENERGY_PARTICLES.map((particle, i) => {
+          const radius = config.ring / 2 - 10
+          const startX = Math.cos((particle.angle * Math.PI) / 180) * radius
+          const startY = Math.sin((particle.angle * Math.PI) / 180) * radius
+          
+          return (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 rounded-full bg-blue-400"
+              style={{
+                left: '50%',
+                top: '50%',
+                marginLeft: -4,
+                marginTop: -4,
+                boxShadow: '0 0 10px #3b82f6, 0 0 20px #3b82f6',
+              }}
+              initial={{ x: startX, y: startY }}
+              animate={{
+                x: startX,
+                y: startY,
+                scale: [1, 1.5, 1],
+                opacity: [0.8, 1, 0.8],
+              }}
+              transition={{
+                scale: { duration: 2, repeat: Infinity, ease: 'easeInOut', delay: particle.delay },
+                opacity: { duration: 2, repeat: Infinity, ease: 'easeInOut', delay: particle.delay },
+              }}
+            />
+          )
+        })}
       </div>
 
       {/* Logo image with glow */}

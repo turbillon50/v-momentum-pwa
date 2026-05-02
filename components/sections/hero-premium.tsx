@@ -27,7 +27,7 @@ export function HeroPremium({ onNavigate }: HeroPremiumProps) {
     <motion.section
       ref={containerRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      style={{ opacity, scale }}
+      style={{ opacity, scale, position: 'relative' }}
     >
       {/* Floating tech keywords */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
