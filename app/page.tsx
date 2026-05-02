@@ -14,7 +14,7 @@ import { BottomNav } from '@/components/navigation/bottom-nav'
 // Premium Sections
 import { HeroPremium } from '@/components/sections/hero-premium'
 import { ProcesoSection } from '@/components/sections/proceso-section'
-import { IntegrationsEcosystem } from '@/components/sections/integrations-ecosystem'
+import { AppGridSection } from '@/components/sections/app-grid-section'
 import { MarketingGallery } from '@/components/sections/marketing-gallery'
 import { PricingSection } from '@/components/sections/pricing-section'
 import { DemosSection } from '@/components/sections/demos-section'
@@ -240,9 +240,9 @@ export default function Home() {
                 <ProcesoSection />
               </section>
 
-              {/* INTEGRACIONES - Interactive Ecosystem */}
+              {/* INTEGRACIONES - App Grid Smartwatch Style */}
               <section ref={(el) => { sectionRefs.current['integraciones'] = el }} id="integraciones">
-                <IntegrationsEcosystem />
+                <AppGridSection />
               </section>
 
               {/* GALERIA - Marketing Materials */}
